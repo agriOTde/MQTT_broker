@@ -1,0 +1,14 @@
+[Unit]
+Description=MQTT Broker Script with Motor
+After=network.target
+
+[Service]
+Type=simple
+User=abdul
+WorkingDirectory=/home/abdul/workspace/mqtt_influx
+ExecStart=/home/abdul/workspace/mqtt_influx/.venv/bin/python3 mqtt_web_psql_motor.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
