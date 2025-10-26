@@ -94,15 +94,14 @@ def on_message(client, userdata, msg):
         # Handle acknowledgment from ESP32 → store in motor_data table
         elif topic == MQTT_ACK_TOPIC_FROM_ESP32:
             # print("Forwarding ACK to PostgreSQL motor_data table...")
-
+            esp_id = data.get("espClientID")
             status_str = data.get("status")  # Will be "True" or "False" (as string)
             if status_str in ("True", "False"):
                 motor_status = status_str == "True"  # Convert to actual bool
                 cur.execute(
-                    "INSERT INTO motor_data (motor_status) VALUES (%s)",
-                    (motor_status,)
+                    "INSERT INTO motor_data (motor_status, esp_id) VALUES (%s, %s)",
+                    (motor_status, esp_id)
                 )
-                # print("Motor status inserted into motor_data table.")
 
             else:
                 print(f"Invalid 'status' value in payload: {status_str}")
